@@ -12,7 +12,11 @@ const ruleName = process.argv[2];
 const ruleOptions = process.argv[3];
 const ruleContext = process.argv[4];
 
+console.time(`requireRule time for ${ruleName}`);
+
 const ruleFunc = requireRule(ruleName);
+
+console.timeEnd(`requireRule time for ${ruleName}`);
 
 if (!ruleFunc) {
 	throw new Error('You must specify a valid rule name');
