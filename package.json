@@ -98,8 +98,6 @@
     "benchmark": "^2.1.4",
     "common-tags": "^1.8.0",
     "del": "^5.1.0",
-    "eslint": "^6.8.0",
-    "eslint-config-stylelint": "^11.1.0",
     "got": "^10.4.0",
     "husky": "^4.2.1",
     "jest": "^25.1.0",
@@ -108,24 +106,22 @@
     "np": "^5.2.1",
     "npm-run-all": "^4.1.5",
     "postcss-import": "^12.0.1",
-    "prettier": "^1.19.1",
     "remark-cli": "^7.0.1",
     "remark-preset-lint-recommended": "^3.0.3",
     "remark-preset-prettier": "^0.4.0",
     "remark-validate-links": "^9.2.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "xo": "^0.25.4"
   },
   "scripts": {
     "benchmark-rule": "node scripts/benchmark-rule.js",
     "jest": "jest",
     "jest:detectleaks": "jest --detectLeaks",
-    "lint:js": "eslint . --cache --max-warnings=0",
+    "lint:js": "xo",
     "lint:md": "remark . --quiet --frail",
     "lint:types": "tsc",
     "lint": "npm-run-all --parallel lint:*",
-    "pretest": "npm-run-all --serial lint prettier:check",
-    "prettier:check": "prettier \"**/*.{md,js}\" --check",
-    "prettier:fix": "prettier \"**/*.{md,js}\" --write",
+    "pretest": "npm run lint",
     "release": "np",
     "test": "jest --coverage",
     "watch": "jest --watch"
@@ -137,71 +133,63 @@
   },
   "lint-staged": {
     "*.js": [
-      "prettier --write",
-      "eslint --max-warnings=0 --fix"
+      "xo --fix"
     ],
     "*.md": [
       "prettier --write",
       "remark --quiet --frail"
     ]
   },
-  "eslintConfig": {
-    "parserOptions": {
-      "ecmaVersion": 2019
-    },
-    "extends": [
-      "stylelint"
+  "xo": {
+    "envs": [
+      "jest",
+      "node"
     ],
-    "globals": {
-      "testRule": true
-    },
+    "ignores": [
+      "lib/utils/parseCalcExpression/parser.js"
+    ],
+    "prettier": true,
+    "globals": [
+      "testRule"
+    ],
     "rules": {
-      "array-callback-return": "error",
-      "dot-notation": "error",
-      "func-name-matching": "error",
-      "guard-for-in": "error",
-      "no-else-return": [
-        "error",
-        {
-          "allowElseIf": false
-        }
-      ],
-      "no-implicit-coercion": "error",
-      "no-lonely-if": "error",
+      "camelcase": "off",
+      "capitalized-comments": "off",
+      "complexity": "off",
+      "default-case": "off",
+      "func-names": "off",
+      "import/order": "off",
+      "max-params": "off",
       "no-mixed-spaces-and-tabs": "off",
-      "no-unneeded-ternary": "error",
-      "no-useless-return": "error",
-      "no-unused-vars": [
-        "error",
-        {
-          "ignoreRestSiblings": true
-        }
+      "no-negated-condition": "off",
+      "no-return-assign": "off",
+      "object-curly-spacing": [
+        "off",
+        "always"
       ],
-      "operator-assignment": "error",
-      "prefer-object-spread": "error",
-      "prefer-regex-literals": "error",
-      "prefer-rest-params": "error",
-      "prefer-spread": "error",
-      "prefer-template": "error",
-      "node/no-unsupported-features/es-builtins": [
-        "error",
-        {
-          "version": ">=10.18.0"
+      "prefer-destructuring": "off",
+      "promise/prefer-await-to-then": "off",
+      "spaced-comment": "off",
+      "unicorn/catch-error-name": "off",
+      "unicorn/explicit-length-check": "off",
+      "unicorn/filename-case": "off",
+      "unicorn/import-index": "off",
+      "unicorn/no-for-loop": "off",
+      "unicorn/no-zero-fractions": "off",
+      "unicorn/prefer-exponentiation-operator": "off",
+      "unicorn/prefer-reflect-apply": "off",
+      "unicorn/prefer-spread": "off",
+      "unicorn/prefer-string-slice": "off"
+    },
+    "overrides": [
+      {
+        "files": "**/__tests__/*.js",
+        "rules": {
+          "no-template-curly-in-string": "off",
+          "no-useless-concat": "off"
         }
-      ],
-      "node/no-unsupported-features/es-syntax": [
-        "error",
-        {
-          "version": ">=10.18.0"
-        }
-      ],
-      "node/no-unsupported-features/node-builtins": [
-        "error",
-        {
-          "version": ">=10.18.0"
-        }
-      ]
-    }
+      }
+    ]
   },
   "jest": {
     "clearMocks": true,
